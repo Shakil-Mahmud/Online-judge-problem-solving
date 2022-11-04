@@ -1,40 +1,33 @@
 class Solution:
     def isValid(self, s: str) -> bool:
         stack = []
-        last=-1
+        stack_size = 0
         for i in range(len(s)):
-            if s[i] == ')':
-                if last<0:
-                    return False
-                if stack[last]!= '(':
-                    return False
-                stack.pop()
-                last-=1
+            if s[i] in [ '(','{','[' ]:
+                stack.append(s[i])
+                stack_size+=1
                 continue
-    
-            if s[i] == '}':
-                if  last<0:
+            if s[i]== ']':
+                if stack_size>0 and stack[stack_size-1]=='[':
+                    stack.pop()
+                    stack_size-=1
+                    continue
+                else:
                     return False
-                if stack[last]!= '}':
+            if s[i]== '}':
+                if stack_size>0 and stack[stack_size-1]=='{':
+                    stack.pop()
+                    stack_size-=1
+                    continue
+                else:
                     return False
-                stack.pop()
-                last-=1
-                continue
-            
-            if s[i] == ']':
-                if  last<0:
-                   return False
-                if stack[last]!= '[':
+            if s[i]== ')':
+                if stack_size>0 and stack[stack_size-1]=='(':
+                    stack.pop()
+                    stack_size-=1
+                    continue
+                else:
                     return False
-                stack.pop()
-                last-=1
-                continue
-                
-            last+=1
-            stack.append(s[i])
-        
-        if len(stack)>0:
+        if stack_size>0:
             return False
-
         return True
-        
